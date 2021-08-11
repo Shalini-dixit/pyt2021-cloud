@@ -16,6 +16,20 @@ def get_all():
 
     return jsonify(products)
 
+@app.route('/api/products/<id>', methods =['GET'])
+def get_by_id(id):
+    products = []
+
+    result = cursor.execute('SELECT p.Id, p.Name, p.Description,c.Name Category from PRODUCTS p join Categories c on p.CategoryId = c.Id where p.Id = ?',[id]).fetchone()
+    product = {
+        'id': result.Id,
+        'name': result.Name,
+        'description': result.Description,
+        'category': result.Category
+    }
+    return jsonify(product)
+    
+
 @app.route('/api/products', methods=['POST'])
 def post():
     name = request.json['name']
